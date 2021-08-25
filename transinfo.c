@@ -4,7 +4,14 @@
 #include <ctype.h>
 
 #include "transinfo.h"
+#include "DB.h"
 
+
+void update_datebase(ST_transaction_t trans,database_t* ptr)
+{
+  int index = Is_PAN_exist(atoi(trans.cardHolderData.primaryAccountNumber));
+  ptr[index].balance -= trans.transData.transAmount;
+}
 void save2txt(ST_transaction_t trans)
 {
     FILE *fptr;
@@ -21,6 +28,7 @@ void save2txt(ST_transaction_t trans)
         fprintf(fptr,"%d\t\n",trans.transStat );
 
     fclose(fptr);
+    update_datebase(trans,database_t* ptr);
 }
 
 
@@ -47,14 +55,4 @@ void view_history()
       printf("%s",data[i]);
   }
   fclose(fp);
-}
-
-int main()
-{
-
-    ST_transaction_t t = {{"asdasdasda","1234568946","12345"},{160.5,5000,"19/05/2158"},APPROVED};
-    save2txt(t);
-    view_history();
-
-    return 0;
 }
