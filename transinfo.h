@@ -5,15 +5,7 @@
 #include "types.h"
 
 
-void saveList();
-void view_history();
-
-
-
-
-
-
-
-
+void vSaveText(ST_transaction_t trans);
+void vViewHistory();
 
 #endif
