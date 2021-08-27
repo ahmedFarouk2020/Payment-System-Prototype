@@ -16,15 +16,15 @@ ST_cardData_t* p_card = &card ;
 ST_terminalData_t terminal = {2000.00 , 5000.00 , "trans date"} ;
 ST_terminalData_t* p_terminal = &terminal ;
 
+ST_transaction_t trans_data = {card , terminal , DECLINED} ;
+ST_transaction_t* p_trans_data = &trans_data ;
 
-ST_cardData_t* get_card_data (void) ;    /* return pointer to used structure to be passed to validation function */
-ST_terminalData_t* get_terminal_data (void) ;    /* return pointer to used structure to be passed to validation function */
-int validate_terminal_data (ST_terminalData_t *) ;  /* returns (0 >> failed) or (1 >> success)  */
+void get_card_data (void) ;      /* Access to the global pointer p_card */
+void get_terminal_data (void) ;	 /* Access to the global pointer p_terminal */
 
-EN_transStat_t check_expired (ST_cardData_t * , ST_terminalData_t *) ;
-EN_transStat_t check_amount (ST_cardData_t * , ST_terminalData_t *) ;
-EN_transStat_t validate_server (ST_cardData_t * , ST_terminalData_t *) ; /* returns an enum status  */
-void save_transaction (ST_cardData_t * , ST_terminalData_t *) ; /* save transaction in server */
+int validate_terminal_data (ST_terminalData_t * p_t) ;  /* (check expiration + amount) returns (0 >> failed) or (1 >> success)  */
+EN_transStat_t validate_server (ST_transaction_t* p_trans) ; 	/* returns an enum status  */
+void save_transaction (ST_transaction_t* p_trans) ; 			/* save transaction in server */
 
 void app (void) ;
 void view_history (void) ;
@@ -52,28 +52,18 @@ int main () {
 }
 
 void app (void) {
-	p_card = get_card_data() ;  // get Card Data
-	p_terminal = get_terminal_data() ;   // get Terminal Data
-	if (validate_terminal_data(p_terminal) == 0) {   // invalid Terminal Data
-		printf ("Invalid Terminal Data \n") ;
+	get_card_data() ;  // get Card Data   (sure it is valid)
+	get_terminal_data() ;   // get Terminal Data  (sure it is valid)
+	if (validate_terminal_data(p_terminal) == 0) {   // invalid Terminal Data (expired OR too much amount)
+		rejected() ;
 	}
-	else {                               // valid Terminal Data
-		if (check_expired(p_card , p_terminal) == DECLINED) {    // expired card
+	else {                               // valid Terminal Data (Card Not expired + Not too much amount)
+		if (validate_server(p_trans_data) == DECLINED) {  // data doesn't match with server data
 			rejected() ;
 		}
-		else if (check_expired(p_card , p_terminal) == APPROVED) {    // not expired card
-			if (check_amount(p_card , p_terminal) == DECLINED) {      // too much amount
-				rejected() ;
-			}
-			else if (check_amount(p_card , p_terminal) == APPROVED) {   // not too much amount
-				if (validate_server(p_card , p_terminal) == DECLINED) {  // data doesn't match with server data
-					rejected() ;
-				}
-				else if (validate_server(p_card , p_terminal) == APPROVED) {   // data matches with server data
-					approved() ;
-					save_transaction(p_card , p_terminal) ;
-				}
-			}
+		else if (validate_server(p_trans_data) == APPROVED) {   // data matches with server data
+			approved() ;
+			save_transaction(p_trans_data) ;
 		}
 	}
 }
@@ -84,4 +74,3 @@ void approved (void) {
 void rejected (void) {
 	printf ("Transaction is Declined \n") ;
 }
-
