@@ -76,7 +76,7 @@ void vSort(uint32_t* arr ,uint8_t (* arr2)[150], uint8_t arr_size)       //selec
   Parameters -> ST_transaction_t that contains transaction info
   return -> none
 */
-void vSaveText(ST_transaction_t trans)
+void save_transaction(ST_transaction_t trans)
 {
     FILE *fptr;
     fptr = fopen("transactions.txt","a");               //'a' -> append to file
@@ -163,7 +163,7 @@ uint8_t u8GetDataFromFile(uint8_t (* data)[150])
   inputs -> none
   no return.
 */
-void vViewHistory()
+void view_history()
 {
   uint8_t data[150][150];
   uint8_t data_count = u8GetDataFromFile(data);
