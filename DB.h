@@ -19,41 +19,41 @@ typedef struct database
 /* Function Declaration */
 
 /******
- *  Function Description:  
+ *  Function Description:
  *      Create DB (dynamicly allocated array) once (we just need one array).
  *  Parameters: none
- *  return: 
+ *  return:
  *      pointer to the first location of DB
  */
 database_t* create_database (void);
 
 /******
- *  Function Description:  
+ *  Function Description:
  *      assign initial values to DB.
- *  Parameters: 
+ *  Parameters:
  *      pointer to the first location of DB
  *  return: none
  */
 void init_database (database_t* ptr);
 
 /******
- *  Function Description:  
+ *  Function Description:
  *      search on a PAN in the database.
- *  Parameters: 
+ *  Parameters:
  *      PAN (integer of 9 digits)
- *  return: 
+ *  return:
  *      the index of PAN (if exist) or 255 (if PAN not exist)
  */
 uint8_t Is_PAN_exist(int PAN);
 
 
 /******
- *  Function Description:  
+ *  Function Description:
  *      Insert user at the end of database.
- *  Parameters: 
- *      PAN (integer of 9 digits), 
+ *  Parameters:
+ *      PAN (integer of 9 digits),
  *      balance (total charge in card)
- *  return: 
+ *  return:
  *      0 -> inserted successfully
  *      1 -> not inserted (already exist)
  */
