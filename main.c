@@ -5,22 +5,21 @@
 #include "stdio.h"
 #include "stdint.h"
 #include "types.h"     // for structures' definitions
+#include "input.h"
 /*
  * NOTES : must include new header files which includes the each function prototype
  *
  */
 
-ST_cardData_t card = {"name" , "account_number" , "expiry_date"} ;
-ST_cardData_t* p_card = &card ;
+ST_cardData_t* p_card = NULL ;
 
-ST_terminalData_t terminal = {2000.00 , 5000.00 , "trans date"} ;
-ST_terminalData_t* p_terminal = &terminal ;
+ST_terminalData_t* p_terminal = NULL ;
 
 ST_transaction_t trans_data = {card , terminal , DECLINED} ;
 ST_transaction_t* p_trans_data = &trans_data ;
 
-void get_card_data (void) ;      /* Access to the global pointer p_card */
-void get_terminal_data (void) ;	 /* Access to the global pointer p_terminal */
+ST_cardData_t* get_card_data (void) ;      /* Access to the global pointer p_card */
+ST_terminalData_t* get_terminal_data (void) ;	 /* Access to the global pointer p_terminal */
 
 int validate_terminal_data (ST_terminalData_t * p_t) ;  /* (check expiration + amount) returns (0 >> failed) or (1 >> success)  */
 EN_transStat_t validate_server (ST_transaction_t* p_trans) ; 	/* returns an enum status  */
@@ -52,8 +51,11 @@ int main () {
 }
 
 void app (void) {
-	get_card_data() ;  // get Card Data   (sure it is valid)
-	get_terminal_data() ;   // get Terminal Data  (sure it is valid)
+	ST_cardData_t*  card_Data_ptr = get_card_data() ;  // get Card Data   (sure it is valid)
+	p_card = card_Data_ptr;
+	ST_terminalData_t* terminal_Data_ptr =  get_terminal_data() ;   // get Terminal Data  (sure it is valid)
+	p_terminal =  terminal_Data_ptr;
+	
 	if (validate_terminal_data(p_terminal) == 0) {   // invalid Terminal Data (expired OR too much amount)
 		rejected() ;
 	}
