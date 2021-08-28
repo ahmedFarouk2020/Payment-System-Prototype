@@ -5,7 +5,7 @@
 #include "types.h"
 
 
-void save_transaction(ST_transaction_t trans);
+void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData);
 void view_history();
 
 #endif
