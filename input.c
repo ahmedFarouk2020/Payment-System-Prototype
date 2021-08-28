@@ -12,8 +12,6 @@ uint8_t get_size(uint8_t* s);
 uint8_t check_format_ED(uint8_t* s);
 //check format for transaction date
 uint8_t check_format_TD(uint8_t* s);
-extern uint32_t g_current_pan ;
-
 void take_Card_Holder_Name(ST_cardData_t* cardData_ptr);
 void take_Account_Number(ST_cardData_t* cardData_ptr);
 void take_Expiry_Date(ST_cardData_t* cardData_ptr);
@@ -37,8 +35,6 @@ ST_cardData_t* get_card_data(void)
 	 /******************************************************/
 	 take_Expiry_Date( cardData_ptr);
 
-	 g_current_pan = atoi(cardData_ptr->primaryAccountNumber) ;
-
 	 return cardData_ptr;
 }
 
@@ -60,11 +56,22 @@ int isNumber(uint8_t * s)
 {
     for (int i = 0; s[i]!= '\0'; i++)
     {
+        if (isdigit(s[i]))
+              return 0;
+    }
+    return 1;
+}
+
+int isNotNumber(uint8_t * s)
+{
+    for (int i = 0; s[i]!= '\0'; i++)
+    {
         if (!isdigit(s[i]))
               return 0;
     }
     return 1;
 }
+
 uint8_t get_size(uint8_t* s)
 {
 	uint8_t size = 0;
@@ -146,6 +153,19 @@ uint8_t check_format_TD(uint8_t* s)
 	}
 }
 
+uint8_t isAlpha(uint8_t* s)
+{
+	 for (int i = 0; s[i]!= '\0'; i++)
+	{
+		 if( !(s[i]>='a' && s[i]<='z') && !(s[i]>='A' && s[i]<='Z'))
+			  return 0;
+	}
+	    return 1;
+}
+
+
+
+
 void take_Card_Holder_Name(ST_cardData_t* cardData_ptr)
 {
 
@@ -153,17 +173,17 @@ void take_Card_Holder_Name(ST_cardData_t* cardData_ptr)
 	uint8_t tempName[25];
 	uint8_t accepted0 = 1;
 	do{
-		printf("Please Enter the Card Holder Name: \n");
+		printf("Please Enter the Card Holder Name:.. \n");
 		fflush(stdout);//Clears the stdout buffer
 		scanf(" %s", tempName );
 
 		uint8_t nameSize= get_size(tempName);
 
-		printf("%d\n", nameSize);
+	//	printf("%d\n", nameSize);
 		if(nameSize > 25 )
 		{
 			//assumption : Pin is 9 digits
-			printf("Invalid Pin Number. \n");
+			printf("Invalid Holder Name : Holder name size exceeded maximum size  \n");
 			accepted0 = 0;
 		}
 		else
@@ -171,24 +191,36 @@ void take_Card_Holder_Name(ST_cardData_t* cardData_ptr)
 			accepted0 = 1;
 		}
 
-		if(isNumber(tempName))
+		if(!isNumber(tempName))
 		{
 			accepted0 = 0;
+			printf("Invalid Holder Name : Name must contain anly alphabet characters  \n");
 		}
 		else
 		{
 			accepted0 &= 1;
 		}
-		printf("%s\n", tempName);
+
+		if(!isAlpha(tempName))
+		{
+			accepted0 = 0;
+			printf("Invalid Holder Name : Name can not contain any special characters  \n");
+		}
+		else
+		{
+			accepted0 &= 1;
+		}
+
+		//printf("%s\n", tempName);
 		uint8_t lastIndex = 23;
 		for(int i =0 ; tempName[i] != '\0';i++)
 		{
 			cardData_ptr->cardHolderName[i] = tempName[i];
-			printf("%c",cardData_ptr->cardHolderName[i]);
+			//printf("%c",cardData_ptr->cardHolderName[i]);
 			lastIndex= i ;
 		}
 		cardData_ptr->cardHolderName[lastIndex+1] = '\0';
-		printf("\n");
+		//printf("\n");
 
 	}while(accepted0 == 0);
 }
@@ -208,7 +240,7 @@ void take_Account_Number(ST_cardData_t* cardData_ptr)
 		if(pinSize != 9 )
 		{
 			//assumption : Pin is 9 digits
-			printf("Invalid Pin Number. \n");
+			printf("Invalid Pin Number: Pin Number must equal 9 digits  \n");
 			accepted = 0;
 		}
 		else
@@ -216,23 +248,24 @@ void take_Account_Number(ST_cardData_t* cardData_ptr)
 			accepted= 1;
 		}
 
-		if(!isNumber(tempPin))
+		if(!isNotNumber(tempPin))
 		{
 			accepted = 0;
+			printf("Invalid Pin Number: Pin Number can not contain any alphabets  \n");
 		}
 		else
 		{
 			accepted &= 1;
 		}
 
-		printf("%s\n", tempPin);
+	//	printf("%s\n", tempPin);
 		for(int i =0 ; tempPin[i] != '\0';i++)
 		{
 			cardData_ptr->primaryAccountNumber[i] = tempPin[i];
-			printf("%c",cardData_ptr->primaryAccountNumber[i]);
+		//	printf("%c",cardData_ptr->primaryAccountNumber[i]);
 		}
 		cardData_ptr->primaryAccountNumber[9] = '\0';
-		printf("\n");
+		//printf("\n");
 
 	}while(accepted == 0);
 }
@@ -243,7 +276,7 @@ void take_Expiry_Date(ST_cardData_t* cardData_ptr)
 	uint8_t tempDate[6];
 	do{
 
-		printf("Please card Expiry Date: \n");
+		printf("Please Enter card Expiry Date: \n");
 		fflush(stdout);//Clears the stdout buffer
 		scanf("%s", tempDate );
 
@@ -251,7 +284,7 @@ void take_Expiry_Date(ST_cardData_t* cardData_ptr)
 
 		if(DateSize != 5) //example : 12/19
 		{
-			printf("Invalid Expiry Date!. \n");
+			printf("Invalid Expiry Date!: Expiry Date must be 5 digits.  \n");
 			accepted2 = 0;
 		}
 		else
@@ -261,7 +294,7 @@ void take_Expiry_Date(ST_cardData_t* cardData_ptr)
 
 		if(!check_format_ED(tempDate))
 		{
-			printf("Invalid Expiry Date!.\n");
+			printf("Invalid Expiry Date!: Expiry Date is not on format: mm/yy \n");
 			accepted2 = 0;
 		}
 		else
@@ -269,13 +302,13 @@ void take_Expiry_Date(ST_cardData_t* cardData_ptr)
 			accepted2 &= 1;
 		}
 
-		printf("%s\n", tempDate);
+		//printf("%s\n", tempDate);
 		for(int i =0 ; tempDate[i] != '\0';i++)
 		{
 			cardData_ptr->cardExpirationData[i] = tempDate[i];
-			printf("%c",cardData_ptr->cardExpirationData[i]);
+		//	printf("%c",cardData_ptr->cardExpirationData[i]);
 		}
-		printf("\n");
+	//	printf("\n");
 
 		cardData_ptr->cardExpirationData[5] = '\0';
 	}while(accepted2 == 0);
@@ -289,7 +322,7 @@ void take_Transaction_Date(ST_terminalData_t* terminalData_t_ptr)
 	uint8_t tempDate[11];
 	do{
 
-		printf("Please Transaction Date: \n");      // 10/10/2021
+		printf("Please Enter Transaction Date: \n");
 		fflush(stdout);//Clears the stdout buffer
 		scanf("%s", tempDate );
 
@@ -297,7 +330,7 @@ void take_Transaction_Date(ST_terminalData_t* terminalData_t_ptr)
 
 		if(DateSize != 10) //example : 12/19
 		{
-			printf("Invalid Transaction Date!. \n");
+			printf("Invalid Transaction Date length: transaction date must be 10 digits if format: dd/mm/yy \n");
 			accepted = 0;
 		}
 		else
@@ -307,7 +340,7 @@ void take_Transaction_Date(ST_terminalData_t* terminalData_t_ptr)
 
 		if(!check_format_TD(tempDate))
 		{
-			printf("Invalid Transaction Date!.\n");
+			printf("Invalid Transaction Date fromat:  transaction date must be 10 digits if format: dd/mm/yy\n");
 			accepted = 0;
 		}
 		else
@@ -315,13 +348,13 @@ void take_Transaction_Date(ST_terminalData_t* terminalData_t_ptr)
 			accepted &= 1;
 		}
 
-		printf("%s\n", tempDate);
+	//	printf("%s\n", tempDate);
 		for(int i =0 ; tempDate[i] != '\0';i++)
 		{
 			terminalData_t_ptr->transactionDate[i] = tempDate[i];
-			printf("%c",terminalData_t_ptr->transactionDate[i]);
+			//printf("%c",terminalData_t_ptr->transactionDate[i]);
 		}
-		printf("\n");
+		//printf("\n");
 
 		terminalData_t_ptr->transactionDate[10] = '\0';  //0 - 9 + '\0'
 	}while(accepted == 0);
@@ -336,7 +369,7 @@ void take_Transaction_Amount(ST_terminalData_t* terminalData_t_ptr)
 	uint8_t accepted = 1;
 	do{
 		printf("Please Enter the transaction Amount: \n");
-		fflush(stdout); //Clears the stdout buffer
+		fflush(stdout);//Clears the stdout buffer
 		scanf("%f", &tempAmount );
 
 		if(tempAmount > terminalData_t_ptr->maxTransAmount)
@@ -349,7 +382,7 @@ void take_Transaction_Amount(ST_terminalData_t* terminalData_t_ptr)
 			accepted = 1;
 		}
 
-		printf("%f\n", tempAmount);
+	//	printf("%f\n", tempAmount);
 		terminalData_t_ptr->transAmount =tempAmount ;
 
 	}while(accepted == 0);
@@ -365,7 +398,7 @@ void take_Maxtransaction_Amount(ST_terminalData_t* terminalData_t_ptr)
 		scanf("%f", &tempAmount );
 
 
-		printf("%f\n", tempAmount);
+	//	printf("%f\n", tempAmount);
 		terminalData_t_ptr->maxTransAmount =tempAmount ;
 
 	}while(accepted == 0);
