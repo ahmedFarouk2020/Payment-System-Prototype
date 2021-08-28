@@ -159,7 +159,7 @@ uint8_t isAlpha(uint8_t* s)
 {
 	 for (int i = 0; s[i]!= '\0'; i++)
 	{
-		 if( !(s[i]>='a' && s[i]<='z') && !(s[i]>='A' && s[i]<='Z'))
+		 if( !(s[i]>='a' && s[i]<='z') && !(s[i]>='A' && s[i]<='Z') && !(s[i] == ' '))
 			  return 0;
 	}
 	    return 1;
@@ -177,7 +177,8 @@ void take_Card_Holder_Name(ST_cardData_t* cardData_ptr)
 	do{
 		printf("Please Enter the Card Holder Name: \n");
 		fflush(stdin);//Clears the stdout buffer
-		scanf(" %s", tempName );
+		gets(tempName);
+		//scanf(" %s", tempName );
 
 		uint8_t nameSize= get_size(tempName);
 
