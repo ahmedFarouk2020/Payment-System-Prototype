@@ -37,7 +37,7 @@ static void bubbleSort(database_t* arr)
     {
         for (int j = 0; j < dynamicSize-1; j++)
         {
-            
+
             if(arr[j].PAN > arr[j+1].PAN) {
                 // SWAP
                 database_t temp = {arr[j].PAN, arr[j].balance};
@@ -50,7 +50,7 @@ static void bubbleSort(database_t* arr)
 }
 
 
-static uint8_t binarySearch(database_t* arr, int value) 
+static uint8_t binarySearch(database_t* arr, int value)
 {
     uint8_t start = 0;                // start position
     uint8_t end = size-1;          // end position
@@ -65,7 +65,7 @@ static uint8_t binarySearch(database_t* arr, int value)
             // value is not found
             return -1;
         }
-        
+
         // value is found?
         if (arr[mid].PAN == value)
         {
@@ -77,7 +77,7 @@ static uint8_t binarySearch(database_t* arr, int value)
         {
             return -1;  // not found
         }
-        
+
         // the value is at the right side?
         if (arr[mid].PAN < value)
         {
@@ -96,9 +96,9 @@ static uint8_t binarySearch(database_t* arr, int value)
             previousMid = mid;
             mid = (start + end) / 2;
             continue;
-        } 
+        }
     }
-   
+
 }
 
 
@@ -117,7 +117,7 @@ database_t* create_database (void) {
 }
 
 void init_database (database_t* ptr) {
-    
+
     // first user
     ptr[0].PAN = 123456789;
     ptr[0].balance = 100.00;
@@ -156,7 +156,7 @@ uint8_t Is_PAN_exist(int PAN) {
     {
         bubbleSort(db);
     }
-    
+
     return binarySearch(db, PAN);
 }
 
@@ -181,17 +181,17 @@ uint8_t insert_user(int PAN, float balance) {
             init_database(db);
             return 0; // can't add users anymore
         }
-        
+
         // initialize database again
         init_database(db);
 
-        // update total_size 
+        // update total_size
         total_size += 5;
     }
     // add user
     db[size].balance = balance;
     db[size].PAN = PAN;
-    // increment the occupied size 
+    // increment the occupied size
     size++ ;
     // printf("successfully updated\n");
     return 1; // successfully updated
@@ -209,9 +209,11 @@ static void printArray(database_t* arr)
         printf("),");
     }
     printf("\n");
+    fflush (stdin) ; 	fflush (stdout) ;
 }
 
 /* the main function is for debugging purposes */
+/*
 int main() {
     create_database();
     init_database(db);
@@ -220,7 +222,7 @@ int main() {
     // printArray(db);
     bubbleSort(db);
     // printArray(db);
-    
+
     // int user_status = binarySearch(ptr, 123100000);
     // printf("%d\n", Is_PAN_exist(456789123));
     insert_user(234000891, 10000.00);
@@ -233,3 +235,4 @@ int main() {
     free(db); // segmentation fault
     return 0;
 }
+*/
