@@ -110,6 +110,7 @@ database_t* create_database (void) {
     {
         db = (database_t*) calloc(15, sizeof(database_t));
         key = 0; // close door
+      //  init_database(db);
         return db;
     }
     // key not exist -> NULL
@@ -197,7 +198,7 @@ uint8_t insert_user(int PAN, float balance) {
     return 1; // successfully updated
 }
 
-static void printArray(database_t* arr)
+void printArray(database_t* arr)
 {
     printf("Array Elements:\n");
     for (int i = 0; i < size; i++)

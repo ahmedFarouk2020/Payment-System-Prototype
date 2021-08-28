@@ -370,4 +370,3 @@ void take_Maxtransaction_Amount(ST_terminalData_t* terminalData_t_ptr)
 
 	}while(accepted == 0);
 }
-

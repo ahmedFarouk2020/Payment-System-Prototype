@@ -62,7 +62,7 @@ uint8_t insert_user(int PAN, float balance);
 /* Static Functions */
 static void bubbleSort(database_t* arr);
 static uint8_t Is_sorted (database_t* arr);
-static void printArray(database_t* arr);
+void printArray(database_t* arr);
 static uint8_t binarySearch(database_t* arr, int value);
 
 

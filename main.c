@@ -42,6 +42,8 @@ void rejected (void) ;
 
 int main () {
 	int choice ;
+	create_database();
+	init_database(db);
 	while (1) {
 		printf ("1 : new operation \n") ;
 		printf ("2 : view history \n") ;
@@ -61,8 +63,7 @@ int main () {
 }
 
 void app (void) {
-	create_database();
-	init_database(db);
+
 	ST_cardData_t*  card_Data_ptr = get_card_data() ;  // get Card Data   (sure it is valid)
 	p_card = card_Data_ptr;
 	ST_terminalData_t* terminal_Data_ptr =  get_terminal_data() ;   // get Terminal Data  (sure it is valid)
@@ -87,6 +88,7 @@ void app (void) {
 			approved() ;
 			trans_data.cardHolderData = card ;
 			save_transaction(p_card , p_terminal) ;
+			update_datebase(p_card,p_terminal,db);
 		}
 	}
 }

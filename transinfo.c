@@ -5,15 +5,16 @@
 
 #include "transinfo.h"
 
-/*
-#include "DB.h"
-void update_datebase(ST_transaction_t trans,database_t* ptr)
+void update_datebase(ST_cardData_t* cardData, ST_terminalData_t* terminalData,database_t* ptr)
 {
-  int index = Is_PAN_exist(atoi(trans.cardHolderData.primaryAccountNumber));
-  ptr[index].balance -= trans.transData.transAmount;
-}
-*/
+  int index = Is_PAN_exist(atoi(cardData->primaryAccountNumber));
+  ptr[index].balance -= terminalData->transAmount;
 
+  printf("after: %d\n",ptr[index].balance);
+
+
+  printArray(ptr);
+}
 
 
 /*
@@ -75,6 +76,8 @@ void vSort(uint32_t* arr ,uint8_t (* arr2)[150], uint8_t arr_size)       //selec
 */
 void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData)
 {
+  //  update_datebase(ST_cardData_t* cardData,ST_terminalData_t* terminalData);
+
     FILE *fptr;
     fptr = fopen("transactions.txt","a");               //'a' -> append to file
     if(fptr == NULL)
@@ -82,14 +85,14 @@ void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData)
         perror("Error!");
     }
 
-        fprintf(fptr,"%-30s\t",trans.cardHolderData.cardHolderName);
-        fprintf(fptr,"%s\t\t",trans.cardHolderData.primaryAccountNumber);
-        fprintf(fptr,"%s\t\t",trans.transData.transactionDate);
-        fprintf(fptr,"%-9f\t",trans.transData.transAmount);
-        fprintf(fptr,"%d\t\n",trans.transStat );
+    fprintf(fptr,"%-30s\t",cardData->cardHolderName);
+    fprintf(fptr,"%s\t\t",cardData->primaryAccountNumber);
+    fprintf(fptr,"%s\t\t",terminalData->transactionDate);
+    fprintf(fptr,"%-9f\t",terminalData->transAmount);
+    fprintf(fptr,"%d\t\n",APPROVED );
 
     fclose(fptr);
-    //update_datebase(trans,database_t* ptr);
+    //
 }
 /*
   Funtion to parse PAN number from the text file
@@ -189,6 +192,3 @@ int main()
   vViewHistory();
 }
 */
-
-
-
