@@ -7,7 +7,6 @@
 
 /*
 #include "DB.h"
-
 void update_datebase(ST_transaction_t trans,database_t* ptr)
 {
   int index = Is_PAN_exist(atoi(trans.cardHolderData.primaryAccountNumber));
@@ -45,10 +44,8 @@ strcpy(y,temp);
 /*
   Function to sort 2-D array that contains all data
   based on Int array that contains integer PANs
-
   Parameters: (uint32_t* PAN array,uint8_t 2-D array[][MAXLINE],number of lines)
   no return
-
 */
 void vSort(uint32_t* arr ,uint8_t (* arr2)[150], uint8_t arr_size)       //selection sort
 {
@@ -76,7 +73,7 @@ void vSort(uint32_t* arr ,uint8_t (* arr2)[150], uint8_t arr_size)       //selec
   Parameters -> ST_transaction_t that contains transaction info
   return -> none
 */
-void save_transaction(ST_transaction_t trans)
+void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData)
 {
     FILE *fptr;
     fptr = fopen("transactions.txt","a");               //'a' -> append to file
@@ -192,3 +189,6 @@ int main()
   vViewHistory();
 }
 */
+
+
+
