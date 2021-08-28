@@ -1,5 +1,6 @@
 #ifndef VALIDATION_H_INCLUDED
 #define VALIDATION_H_INCLUDED
+#include "DB.h"
 /*
 * Function Description
 *  first it checks the expiry date of the card if it's not expired then it checks for the amount required whether it's smaller
