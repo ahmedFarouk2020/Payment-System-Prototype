@@ -11,6 +11,7 @@ uint8_t get_size(uint8_t* s);
 //check format for Expiry date
 uint8_t check_format_ED(uint8_t* s);
 //check format for transaction date
+extern uint32_t g_current_pan ;
 uint8_t check_format_TD(uint8_t* s);
 void take_Card_Holder_Name(ST_cardData_t* cardData_ptr);
 void take_Account_Number(ST_cardData_t* cardData_ptr);
@@ -34,6 +35,7 @@ ST_cardData_t* get_card_data(void)
 
 	 /******************************************************/
 	 take_Expiry_Date( cardData_ptr);
+	g_current_pan = atoi(cardData_ptr->primaryAccountNumber) ;
 
 	 return cardData_ptr;
 }
