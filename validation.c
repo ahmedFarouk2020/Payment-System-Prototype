@@ -2,6 +2,7 @@
 #include "validation.h"
 #include "DB.h"
 #include <stdlib.h>
+#include <stdio.h>
 extern uint32_t g_current_pan ;
 EN_transStat_t validate_terminal_data(ST_cardData_t* cardData, ST_terminalData_t* terminalData)
 {
@@ -13,7 +14,7 @@ EN_transStat_t validate_terminal_data(ST_cardData_t* cardData, ST_terminalData_t
     t_year = ((terminalData->transactionDate[8]-'0') * 10) + ((terminalData->transactionDate[9]-'0'));
 
    // printf ("Inside validate terminal data function \n") ;
-    printf ("card month = %d \n" , c_month ) ;
+    printf ("card month = %d \n" ,c_month ) ;
     printf ("card year = %d \n" , c_year ) ;
     printf ("terminal month = %d \n" , t_month ) ;
     printf ("terminal year = %d \n" , t_year ) ;

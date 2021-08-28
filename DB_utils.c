@@ -110,7 +110,6 @@ database_t* create_database (void) {
     {
         db = (database_t*) calloc(15, sizeof(database_t));
         key = 0; // close door
-      //  init_database(db);
         return db;
     }
     // key not exist -> NULL

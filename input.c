@@ -154,7 +154,7 @@ void take_Card_Holder_Name(ST_cardData_t* cardData_ptr)
 	uint8_t accepted0 = 1;
 	do{
 		printf("Please Enter the Card Holder Name: \n");
-		fflush(stdout);//Clears the stdout buffer
+		fflush(stdin);//Clears the stdout buffer
 		scanf(" %s", tempName );
 
 		uint8_t nameSize= get_size(tempName);
@@ -200,7 +200,7 @@ void take_Account_Number(ST_cardData_t* cardData_ptr)
 	uint8_t accepted = 1;
 	do{
 		printf("Please Enter the Primary Account Number: \n");
-		fflush(stdout);//Clears the stdout buffer
+		fflush(stdin);//Clears the stdout buffer
 		scanf("%s", tempPin );
 
 		uint8_t pinSize= get_size(tempPin);

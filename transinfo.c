@@ -5,15 +5,13 @@
 
 #include "transinfo.h"
 
-void update_datebase(ST_cardData_t* cardData, ST_terminalData_t* terminalData,database_t* ptr)
+float f32_updateDatebase(ST_cardData_t* cardData, ST_terminalData_t* terminalData,database_t* ptr)
 {
   int index = Is_PAN_exist(atoi(cardData->primaryAccountNumber));
+  printf("index: %d\n",index );
   ptr[index].balance -= terminalData->transAmount;
-
-  printf("after: %d\n",ptr[index].balance);
-
-
-  printArray(ptr);
+  //printf("after: %f\n",ptr[index].balance);
+  return ptr[index].balance;
 }
 
 
@@ -74,9 +72,9 @@ void vSort(uint32_t* arr ,uint8_t (* arr2)[150], uint8_t arr_size)       //selec
   Parameters -> ST_transaction_t that contains transaction info
   return -> none
 */
-void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData)
+void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData,database_t* ptr)
 {
-  //  update_datebase(ST_cardData_t* cardData,ST_terminalData_t* terminalData);
+    float remainingBalance=f32_updateDatebase(cardData,terminalData,ptr);
 
     FILE *fptr;
     fptr = fopen("transactions.txt","a");               //'a' -> append to file
@@ -89,10 +87,9 @@ void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData)
     fprintf(fptr,"%s\t\t",cardData->primaryAccountNumber);
     fprintf(fptr,"%s\t\t",terminalData->transactionDate);
     fprintf(fptr,"%-9f\t",terminalData->transAmount);
-    fprintf(fptr,"%d\t\n",APPROVED );
+    fprintf(fptr,"%-9f\t\n",remainingBalance);
 
     fclose(fptr);
-    //
 }
 /*
   Funtion to parse PAN number from the text file
@@ -129,10 +126,10 @@ void vParsePAN(uint8_t (* data)[150],uint32_t* pan_int,uint8_t data_count)
 
 void vPrintData(uint8_t (* data)[150],uint8_t data_count)
 {
-  printf("NAME\t\t\t\tPAN\t\t\tDATE\t\t\tAMOUNT\t\tAPPROVAL\n\n");
+  printf("NAME\t\t\t\tPAN\t\t\tDATE\t\t\tAMOUNT\t\tREMAINING\n\n");
   for(int i = 0 ; i<data_count;i++){
       printf("%s",data[i]);
-      printf("----------------------------------------------------------------------------------------------\n");
+      printf("\n-------------------------------------------------------------------------------------------------------------\n");
   }
 }
 /*

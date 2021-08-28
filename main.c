@@ -87,8 +87,7 @@ void app (void) {
 			printf ("inside else if in main \n") ;
 			approved() ;
 			trans_data.cardHolderData = card ;
-			save_transaction(p_card , p_terminal) ;
-			update_datebase(p_card,p_terminal,db);
+			save_transaction(p_card , p_terminal,db) ;
 		}
 	}
 }

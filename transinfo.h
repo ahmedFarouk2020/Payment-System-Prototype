@@ -6,9 +6,9 @@
 #include "DB.h"
 
 
-void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData);
+void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData,database_t* ptr);
 void view_history();
-void update_datebase(ST_cardData_t* cardData, ST_terminalData_t* terminalData,database_t* ptr);
+static float f32_updateDatebase(ST_cardData_t* cardData, ST_terminalData_t* terminalData,database_t* ptr);
 
 
 #endif
