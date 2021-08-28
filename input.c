@@ -12,6 +12,8 @@ uint8_t get_size(uint8_t* s);
 uint8_t check_format_ED(uint8_t* s);
 //check format for transaction date
 uint8_t check_format_TD(uint8_t* s);
+extern uint32_t g_current_pan ;
+
 void take_Card_Holder_Name(ST_cardData_t* cardData_ptr);
 void take_Account_Number(ST_cardData_t* cardData_ptr);
 void take_Expiry_Date(ST_cardData_t* cardData_ptr);
@@ -34,6 +36,8 @@ ST_cardData_t* get_card_data(void)
 
 	 /******************************************************/
 	 take_Expiry_Date( cardData_ptr);
+
+	 g_current_pan = atoi(cardData_ptr->primaryAccountNumber) ;
 
 	 return cardData_ptr;
 }
@@ -285,7 +289,7 @@ void take_Transaction_Date(ST_terminalData_t* terminalData_t_ptr)
 	uint8_t tempDate[11];
 	do{
 
-		printf("Please card Expiry Date: \n");
+		printf("Please Transaction Date: \n");      // 10/10/2021
 		fflush(stdout);//Clears the stdout buffer
 		scanf("%s", tempDate );
 
@@ -332,7 +336,7 @@ void take_Transaction_Amount(ST_terminalData_t* terminalData_t_ptr)
 	uint8_t accepted = 1;
 	do{
 		printf("Please Enter the transaction Amount: \n");
-		fflush(stdout);//Clears the stdout buffer
+		fflush(stdout); //Clears the stdout buffer
 		scanf("%f", &tempAmount );
 
 		if(tempAmount > terminalData_t_ptr->maxTransAmount)
@@ -366,3 +370,4 @@ void take_Maxtransaction_Amount(ST_terminalData_t* terminalData_t_ptr)
 
 	}while(accepted == 0);
 }
+
