@@ -162,8 +162,8 @@ uint8_t Is_PAN_exist(int PAN) {
 
 uint8_t insert_user(int PAN, float balance) {
     // check if the user already in database
-    if ( Is_PAN_exist(PAN) ) {
-        // printf("User already exist\n");
+    if ( Is_PAN_exist(PAN) != 255) {
+        printf("User already exist\n");
         return 0; // exist (no insertion occurs)
     }
     static uint8_t total_size = 15;
@@ -179,6 +179,7 @@ uint8_t insert_user(int PAN, float balance) {
             // start the process from beginning
             db = create_database();
             init_database(db);
+            printf("No enough Memory");
             return 0; // can't add users anymore
         }
 
@@ -213,26 +214,26 @@ void printArray(database_t* arr)
 }
 
 /* the main function is for debugging purposes */
-/*
-int main() {
-    create_database();
-    init_database(db);
-    // printf("%d %f", db[5].PAN, db[5].balance);
-    Is_sorted(db);
-    // printArray(db);
-    bubbleSort(db);
-    // printArray(db);
 
-    // int user_status = binarySearch(ptr, 123100000);
-    // printf("%d\n", Is_PAN_exist(456789123));
-    insert_user(234000891, 10000.00);
-    insert_user(234000890, 10000.00);
-    insert_user(234000895, 10000.00);
-    insert_user(234000896, 10000.00);
-    insert_user(234000897, 10000.00);
-    insert_user(234000898, 10000.00);
-    // printArray(db);
-    free(db); // segmentation fault
-    return 0;
-}
-*/
+// int main() {
+//     create_database();
+//     init_database(db);
+//     // printf("%d %f", db[5].PAN, db[5].balance);
+//     Is_sorted(db);
+//     // printArray(db);
+//     bubbleSort(db);
+//     // printArray(db);
+
+//     // int user_status = binarySearch(ptr, 123100000);
+//     // printf("%d\n", Is_PAN_exist(456789123));
+//     insert_user(234000891, 10000.00);
+//     insert_user(234000890, 10000.00);
+//     insert_user(234000895, 10000.00);
+//     insert_user(234000896, 10000.00);
+//     insert_user(234000897, 10000.00);
+//     insert_user(234000898, 10000.00);
+//     printArray(db);
+//     free(db); // segmentation fault
+//     return 0;
+// }
+

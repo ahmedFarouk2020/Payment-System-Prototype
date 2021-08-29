@@ -41,12 +41,15 @@ void approved (void) ;
 void rejected (void) ;
 
 int main () {
+	// declaration
 	int choice ;
+	int PAN = 0; float balance = 0.0; int status;
 	create_database();
 	init_database(db);
 	while (1) {
 		printf ("1 : new operation \n") ;
 		printf ("2 : view history \n") ;
+		printf ("3 : Add User \n") ;
 		fflush (stdin);		fflush(stdout) ;
 		scanf ("%d" , &choice) ;
 		printf ("choice = %d \n" , choice) ;
@@ -56,6 +59,21 @@ int main () {
 			break ;
 		case 2 :
 			view_history() ;
+			break ;
+		case 3 :
+			
+			printf ("Insert PAN = ") ;
+			scanf("%d", &PAN);
+			printf("\n");
+			printf ("Insert balance = ") ;
+			scanf("%.2f", &balance);
+			printf("\n");
+			status = insert_user(PAN,balance) ;
+			if (status)
+			{
+				printf("Updated Successfully...\n"); break;
+			}
+			printf("Not Updated, try again...\n");
 			break ;
 		}
 	}
