@@ -10,7 +10,6 @@
  * card data >> ST_cardData_t
  * terminal data >> ST_terminalData_t
  * transaction data >> ST_transaction_t
- *
  */
 typedef unsigned char	 uint8_t;
 typedef unsigned int	 uint32_t;
