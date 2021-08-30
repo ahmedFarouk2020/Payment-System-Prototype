@@ -28,22 +28,14 @@ uint32_t g_current_pan ;
 ST_transaction_t trans_data ;
 ST_transaction_t* p_trans_data = &trans_data ;
 
-//ST_cardData_t* get_card_data (void) ;      /* Access to the global pointer p_card */
-//ST_terminalData_t* get_terminal_data (void) ;	 /* Access to the global pointer p_terminal */
-
-//EN_transStat_t validate_terminal_data(ST_cardData_t* cardData, ST_terminalData_t* terminalData);  /* (check expiration + amount) returns (0 >> failed) or (1 >> success)  */
-//EN_transStat_t validate_server (ST_cardData_t* cardData, ST_terminalData_t* terminalData , database_t* server) ;  	/* returns an enum status  */
-//void save_transaction (ST_transaction_t* p_trans) ; 			/* save transaction in server */
-
 void app (void) ;
-//void view_history (void) ;
 void approved (void) ;
 void rejected (void) ;
 
 int main () {
 	// declaration
 	int choice ;
-	int PAN = 0; float balance = 0.0; int status;
+	int PAN = 0; float balance; int status;
 	create_database();
 	init_database(db);
 	while (1) {
@@ -61,17 +53,19 @@ int main () {
 			view_history() ;
 			break ;
 		case 3 :
-			
 			printf ("Insert PAN = ") ;
+			fflush (stdin);		fflush(stdout) ;
 			scanf("%d", &PAN);
 			printf("\n");
 			printf ("Insert balance = ") ;
-			scanf("%.2f", &balance);
+			fflush (stdin);		fflush(stdout) ;
+			scanf("%f", &balance);
 			printf("\n");
 			status = insert_user(PAN,balance) ;
 			if (status)
 			{
-				printf("Updated Successfully...\n"); break;
+				printf("Updated Successfully...\n");
+				break;
 			}
 			printf("Not Updated, try again...\n");
 			break ;
@@ -87,11 +81,6 @@ void app (void) {
 	ST_terminalData_t* terminal_Data_ptr =  get_terminal_data() ;   // get Terminal Data  (sure it is valid)
 	p_terminal =  terminal_Data_ptr;
 
-	printf ("Card and Terminal data are collected \n") ;
-	printf ("name = %s \n" , p_card->cardHolderName) ;
-	printf ("expiry data = %s \n" , p_card->cardExpirationData) ;
-	printf ("account number = %s \n" , p_card->primaryAccountNumber) ;
-
 	if (validate_terminal_data(p_card , p_terminal) == DECLINED) {   // invalid Terminal Data (expired OR too much amount)
 		printf ("rejected in terminal data validation \n") ;
 		rejected() ;
@@ -102,12 +91,12 @@ void app (void) {
 			rejected() ;
 		}
 		else if (validate_server(p_card , p_terminal , db) == APPROVED) {   // data matches with server data
-			printf ("inside else if in main \n") ;
 			approved() ;
 			trans_data.cardHolderData = card ;
 			save_transaction(p_card , p_terminal,db) ;
 		}
 	}
+	//printArray(db) ;
 	free(card_Data_ptr);
 	free(terminal_Data_ptr);
 }
@@ -118,3 +107,56 @@ void approved (void) {
 void rejected (void) {
 	printf ("Transaction is Declined \n") ;
 }
+
+/*
+ * Test Case 1 :
+ * name = mahmoud magdy
+ * PAN = 123456789
+ * expiry date = 12/21
+ * transaction date = 10/10/2019
+ * max amount = 5000
+ * transaction amount = 200
+ * >> APPROVED
+ */
+
+/*
+ * Test Case 2 :
+ * name = eslam emara
+ * PAN = 234567891
+ * expiry date = 12/18
+ * transaction date = 10/10/2019
+ * max amount = 5000
+ * transaction amount = 200
+ * >> DECLINED >> card expired
+ */
+
+/*
+* Test Case 3 :
+* name = mohamed
+* PAN = 567891234
+* expiry date = 12/21
+* transaction date = 10/10/2019
+* max amount = 5000
+* transaction amount = 4000
+* >> DECLINED >> amount greater than balance in DB
+*
+* Test Case 4 :
+* name = omar
+* PAN = 741852963
+* expiry date = 12/21
+* transaction date = 10/10/2019
+* max amount = 5000
+* transaction amount = 20
+* >> DECLINED >> PAN NOT exist
+*
+* Test Case 5 :
+* name = ali
+* PAN = 654823719
+* expiry date = 12/21
+* transaction date = 10/10/2019
+* max amount = 5000
+* transaction amount = 7000
+* >> DECLINED >> transaction greater than max amount
+*
+*
+*/
