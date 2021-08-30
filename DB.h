@@ -7,6 +7,7 @@
 
 #ifndef DATABASE_H_
 #define DATABASE_H_
+#include "stdint.h"
 
 typedef unsigned char uint8_t;
 
@@ -44,7 +45,7 @@ void init_database (database_t* ptr);
  *  return:
  *      the index of PAN (if exist) or 255 (if PAN not exist)
  */
-uint8_t Is_PAN_exist(int PAN);
+int8_t Is_PAN_exist(int PAN);
 
 
 /******
@@ -63,7 +64,7 @@ uint8_t insert_user(int PAN, float balance);
 static void bubbleSort(database_t* arr);
 static uint8_t Is_sorted (database_t* arr);
 void printArray(database_t* arr);
-static uint8_t binarySearch(database_t* arr, int value);
+static int8_t binarySearch(database_t* arr, int value);
 
 
 #endif
