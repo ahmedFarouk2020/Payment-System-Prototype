@@ -35,7 +35,7 @@ ST_cardData_t* get_card_data(void)
 
 	 /******************************************************/
 	 take_Expiry_Date( cardData_ptr);
-	g_current_pan = atoi(cardData_ptr->primaryAccountNumber) ;
+	 g_current_pan = atoi(cardData_ptr->primaryAccountNumber) ;
 
 	 return cardData_ptr;
 }
@@ -374,16 +374,6 @@ void take_Transaction_Amount(ST_terminalData_t* terminalData_t_ptr)
 		printf("Please Enter the transaction Amount: \n");
 		fflush(stdout);//Clears the stdout buffer
 		scanf("%f", &tempAmount );
-
-		if(tempAmount > terminalData_t_ptr->maxTransAmount)
-		{
-			accepted = 0 ;
-			printf("Transaction amount exceded maximum transaction amount ");
-		}
-		else
-		{
-			accepted = 1;
-		}
 
 	//	printf("%f\n", tempAmount);
 		terminalData_t_ptr->transAmount =tempAmount ;
