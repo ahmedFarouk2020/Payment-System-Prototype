@@ -108,6 +108,8 @@ void app (void) {
 			save_transaction(p_card , p_terminal,db) ;
 		}
 	}
+	free(card_Data_ptr);
+	free(terminal_Data_ptr);
 }
 
 void approved (void) {
