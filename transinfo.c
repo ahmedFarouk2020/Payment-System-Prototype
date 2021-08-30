@@ -10,7 +10,7 @@ float f32_updateDatebase(ST_cardData_t* cardData, ST_terminalData_t* terminalDat
   int index = Is_PAN_exist(atoi(cardData->primaryAccountNumber));
   printf("index: %d\n",index );
   ptr[index].balance -= terminalData->transAmount;
-  //printf("after: %f\n",ptr[index].balance);
+  printf("after: %f\n",ptr[index].balance);
   return ptr[index].balance;
 }
 
@@ -75,12 +75,12 @@ void vSort(uint32_t* arr ,uint8_t (* arr2)[150], uint8_t arr_size)       //selec
 void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData,database_t* ptr)
 {
     float remainingBalance=f32_updateDatebase(cardData,terminalData,ptr);
-
     FILE *fptr;
     fptr = fopen("transactions.txt","a");               //'a' -> append to file
+    printf ("file will open \n") ;
     if(fptr == NULL)
     {
-        perror("Error!");
+        return ;
     }
 
     fprintf(fptr,"%-30s\t",cardData->cardHolderName);
@@ -90,6 +90,7 @@ void save_transaction(ST_cardData_t* cardData, ST_terminalData_t* terminalData,d
     fprintf(fptr,"%-9f\t\n",remainingBalance);
 
     fclose(fptr);
+    printf ("file is closed \n") ;
 }
 /*
   Funtion to parse PAN number from the text file
@@ -170,22 +171,3 @@ void view_history()
   vSort(pan_int,data,data_count);
   vPrintData(data,data_count);
 }
-
-/* Testing main function */
-
-/*
-int main()
-{
-  ST_transaction_t tr = {"Ahmed Farouk","125789635","15/5",255.5,5000,"11/20/2020",DECLINED};
-  ST_transaction_t tr1 = {"Mahmoud Ayoub","953672058","10/5",918.5,5000,"05/10/2021",APPROVED};
-  ST_transaction_t tr2 = {"Omar Tarek","731289607","15/5",695.5,5000,"15/20/2020",APPROVED};
-  ST_transaction_t tr3 = {"Mohamed Abdelazem","862015689","13/5",1000,5000,"18/20/2020",APPROVED};
-  ST_transaction_t tr4 = {"Eslam Anwar Emara","425638974","28/5",2657,5000,"19/5/2020",APPROVED};
-  vSaveText(tr);
-  vSaveText(tr1);
-  vSaveText(tr2);
-  vSaveText(tr3);
-  vSaveText(tr4);
-  vViewHistory();
-}
-*/
